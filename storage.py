@@ -66,7 +66,9 @@ class RolloutStorage(object):
     def feed_forward_generator(self, advantages, num_mini_batch):
         num_steps, num_processes = self.rewards.size()[0:2]
         batch_size = num_processes * num_steps
-        mini_batch_size = batch_size // num_mini_batch
+        #mini_batch_size = batch_size // num_mini_batch
+        mini_batch_size = max(batch_size, batch_size // num_mini_batch)
+
         sampler = BatchSampler(SubsetRandomSampler(range(batch_size)), mini_batch_size, drop_last=False)
         for indices in sampler:
             observations_batch = self.observations[:-1].view(-1,

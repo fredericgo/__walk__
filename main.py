@@ -66,7 +66,7 @@ def main():
         envs = VecNormalize(envs)
 
     obs_shape = envs.observation_space.shape
-    obs_shape = (obs_shape[0] * args.num_stack, obs_shape[1:])
+    obs_shape = (obs_shape[0] * args.num_stack, *obs_shape[1:])
 
     actor_critic = Policy(obs_shape, envs.action_space, args.recurrent_policy)
 
@@ -136,6 +136,7 @@ def main():
             final_rewards *= masks
             final_rewards += (1 - masks) * episode_rewards
             episode_rewards *= masks
+            print(reward.item())
 
             if args.cuda:
                 masks = masks.cuda()
